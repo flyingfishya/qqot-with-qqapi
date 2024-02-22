@@ -2,6 +2,7 @@
 一般情况下ubuntu环境只要安装以下几个包
 pip3 install requests
 pip3 install qq-botpy
+注意：官方的qq-botpy可能需要python 3.7+
 首先你需要去qq开放平台注册一个自己的qq机器人
 # -*- coding: utf-8 -*-
 import os
