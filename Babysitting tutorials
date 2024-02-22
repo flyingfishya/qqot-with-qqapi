@@ -23,7 +23,7 @@ from botpy.message import DirectMessage, Message
 from botpy.ext.cog_yaml import read
 
 test_config = read(os.path.join(os.path.dirname(__file__), "config.yaml")) 
-//运行这段话之前你需要创建一个config.yaml 内容格式如下 appid和secret密钥你需要通过机器人身份界面生成密钥得到
+//运行这段话之前你需要创建一个config.yaml 内容格式如下 appid和secret密钥你需要通过机器人身份界面生成密钥得到，appid之后可以反复查看，但是密钥一但忘记就要重新生成（导致之前的密钥无效）所以要妥善保管
 //appid: "xxxxxxxxxxx"
 //secret: "xxxxxxxxxxxxxxxxxxxxxxxxxx"
 
