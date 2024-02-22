@@ -1,6 +1,8 @@
-
-
-这里
+首先在使用之前使用python3/python检查python环境使用对应pip3 install/pip insatll进行安装对应的包
+一般情况下ubuntu环境只要安装以下几个包
+pip3 install requests
+pip3 install qq-botpy
+首先你需要去qq开放平台注册一个自己的qq机器人
 # -*- coding: utf-8 -*-
 import os
 
