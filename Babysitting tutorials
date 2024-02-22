@@ -78,7 +78,7 @@ def pangduan(abc = "123"):            //这个函数用于分流，判断是否�
     else:
         wenxin_main(abc)
 
-class MyClient(botpy.Client):
+class MyClient(botpy.Client):  //和qq  api沟通的进程
 
     global wenxin_ask
 
@@ -86,14 +86,14 @@ class MyClient(botpy.Client):
     async def on_ready(self):
         _log.info(f"robot 「{self.robot.name}」 on_ready!")
 
-    async def on_direct_message_create(self, message: DirectMessage):
+    async def on_direct_message_create(self, message: DirectMessage):  //这里开始获取和处理消息
         pangduan(message.content)
         #wenxin_main(message.content)
         #print(message.content)
         await self.api.post_dms(
             guild_id=message.guild_id,
             #content=f"{self.robot.name}知道你说{message.content}了",
-            content=f"{self.robot.name}:"+wenxin_ask,
+            content=f"{self.robot.name}:"+wenxin_ask, //content存放的内容是你之后输出到界面上（回答）的内容，message.content是收到的内容。
             msg_id=message.id,
         )
 
