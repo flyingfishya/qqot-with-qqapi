@@ -17,7 +17,10 @@ from botpy import logging
 from botpy.message import DirectMessage, Message
 from botpy.ext.cog_yaml import read
 
-test_config = read(os.path.join(os.path.dirname(__file__), "config.yaml"))
+test_config = read(os.path.join(os.path.dirname(__file__), "config.yaml")) 
+//运行这段话之前你需要创建一个config.yaml 内容格式如下 appid和secret密钥你需要通过机器人身份界面生成密钥得到
+//appid: "xxxxxxxxxxx"
+//secret: "xxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 _log = logging.get_logger()
 
