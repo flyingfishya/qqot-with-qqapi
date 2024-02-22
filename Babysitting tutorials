@@ -1,0 +1,115 @@
+# -*- coding: utf-8 -*-
+import os
+
+import requests
+import json
+
+import botpy
+from botpy import logging
+
+from botpy.message import DirectMessage, Message
+from botpy.ext.cog_yaml import read
+
+test_config = read(os.path.join(os.path.dirname(__file__), "config.yaml"))
+
+_log = logging.get_logger()
+
+wenxin_ask = "123"
+
+def get_access_token():
+    """
+    使用 API Key，Secret Key 获取access_token，替换下列示例中的应用API Key、应用Secret Key
+    """
+
+    url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=iC6So6ciGZRLhpLFpN9nVXhs&client_secret=JSdPA4lNZmJWyJBzcOF0naHp9eu0QTQA"
+
+    payload = json.dumps("")
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    return response.json().get("access_token")
+
+
+def wenxin_main(abc = "123"):
+    global wenxin_ask
+    url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=" + get_access_token()
+
+    payload = json.dumps({
+        "messages": [
+            {
+                "role": "user",
+                "content": abc
+            }
+        ]
+    })
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    #print(response.text)
+    #print(response.text[response.text.find("result") + 8:response.text.find("is_truncated") - 2])
+    wenxin_ask = response.text[response.text.find("result") + 8:response.text.find("is_truncated") - 2]
+
+def pangduan(abc = "123"):
+    global wenxin_ask
+
+    if abc == "你是谁":
+        wenxin_ask = "我是雨墨鸭"
+    elif abc == "你是谁？":
+        wenxin_ask = "雨墨"
+    elif abc == "你是谁?":
+        wenxin_ask = "雨墨"
+    elif abc == "你是":
+        wenxin_ask = "雨墨"
+    elif abc == "你是？":
+        wenxin_ask = "雨墨"
+    elif abc == "你是?":
+        wenxin_ask = "雨墨"
+    elif abc == "你觉得大黄怎么说":
+        wenxin_ask = "是沙雕"
+    elif abc == "你觉得大黄怎么说?":
+        wenxin_ask = "是沙雕"
+    elif abc == "你觉得大黄怎么说？":
+        wenxin_ask = "是沙雕"
+    else:
+        wenxin_main(abc)
+
+class MyClient(botpy.Client):
+
+    global wenxin_ask
+
+    #main()
+    async def on_ready(self):
+        _log.info(f"robot 「{self.robot.name}」 on_ready!")
+
+    async def on_direct_message_create(self, message: DirectMessage):
+        pangduan(message.content)
+        #wenxin_main(message.content)
+        #print(message.content)
+        await self.api.post_dms(
+            guild_id=message.guild_id,
+            #content=f"{self.robot.name}知道你说{message.content}了",
+            content=f"{self.robot.name}:"+wenxin_ask,
+            msg_id=message.id,
+        )
+
+    async def on_at_message_create(self, message: Message):
+        if "/私信" in message.content:
+            dms_payload = await self.api.create_dms(message.guild_id, message.author.id)
+            _log.info("发送私信")
+            await self.api.post_dms(dms_payload["guild_id"], content="hello", msg_id=message.id)
+
+
+if __name__ == "__main__":
+    # 通过预设置的类型，设置需要监听的事件通道
+    # intents = botpy.Intents.none()
+    # intents.public_guild_messages=True
+
+    # 通过kwargs，设置需要监听的事件通道
+    intents = botpy.Intents(direct_message=True, public_guild_messages=True)
+    client = MyClient(intents=intents)
+    client.run(appid=test_config["appid"], secret=test_config["secret"])
