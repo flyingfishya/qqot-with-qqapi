@@ -4,6 +4,7 @@ pip3 install requests
 pip3 install qq-botpy
 注意：官方的qq-botpy可能需要python 3.7+
 接下来你需要去qq开放平台注册一个自己的qq机器人这时候你可以获得机器人的身份证诸如：机器人qq号，机器人id，机器人的令牌token，密钥等
+接下来按照以下代码的说明来替换你就可以初步实现qq机器人接入文心一言
 # -*- coding: utf-8 -*-
 import os
 
